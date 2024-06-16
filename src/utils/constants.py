@@ -1,3 +1,3 @@
 import os 
 
-HOME_DIR = os.path.abspath("../../")
+PROJECT_ROOT = os.path.abspath("../../")
