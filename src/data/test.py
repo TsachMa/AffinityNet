@@ -1,10 +1,13 @@
 import numpy as np
 import unittest
-from utils import rdkit_mol_featurizer, pdb_to_rdkit_mol, get_protein_or_ligand_ids
+import sys
+sys.path.append("../../")
 
+from src.data.utils import rdkit_mol_featurizer, pdb_to_rdkit_mol, get_protein_or_ligand_ids
+from src.utils.constants import HOME_DIR
 class TestRDKitMolFeaturizer(unittest.TestCase):
     def setUp(self):
-        self.mol = pdb_to_rdkit_mol("/Users/tsachmackey/dfs/affinity_net/test/pdb/test_receptor.pdb")
+        self.mol = pdb_to_rdkit_mol(f"{HOME_DIR}/test_data/pdb/test_methionine.pdb")
         self.protein_or_ligand_id = [-1, -1, -1, -1, -1, -1, -1, -1]
         self.node_features, self.edge_features, self.edge_indices = rdkit_mol_featurizer(self.mol, self.protein_or_ligand_id)
 
@@ -195,7 +198,7 @@ class TestRDKitMolFeaturizer(unittest.TestCase):
 
 class TestGetProteinOrLigandIds(unittest.TestCase):
     def test_get_protein_or_ligand_ids_methionine(self):
-        protein_or_ligand_ids = get_protein_or_ligand_ids("/Users/tsachmackey/dfs/affinity_net/test/pdb/test_receptor.pdb")
+        protein_or_ligand_ids = get_protein_or_ligand_ids(f"{HOME_DIR}/test_data/pdb/test_methionine.pdb")
         #we know that this receptor is just the methionine molecule
         #the first 8 atoms are the protein atoms
         expected_protein_or_ligand_ids = [-1, -1, -1, -1, -1, -1, -1, -1]
@@ -203,7 +206,7 @@ class TestGetProteinOrLigandIds(unittest.TestCase):
         np.testing.assert_array_equal(protein_or_ligand_ids, expected_protein_or_ligand_ids)
 
     def test_get_protein_or_ligand_ids_actual_complex(self):
-        protein_or_ligand_ids = get_protein_or_ligand_ids("/Users/tsachmackey/dfs/affinity_net/BioLiP2/receptor/101mA.pdb")
+        protein_or_ligand_ids = get_protein_or_ligand_ids(f"{HOME_DIR}/test_data/pdb/test_101mA_complex.pdb")
         #the first 1221 atoms are protein atoms 
         expected_protein_or_ligand_ids = [-1] * 1221
         #the next 43 atoms are ligand atoms
