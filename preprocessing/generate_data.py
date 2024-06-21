@@ -5,7 +5,7 @@ import os
 import argparse
 
 from src.data.parse_data import create_cleaned_dataset
-from src.data.add_H_and_mol2_chimera import add_H_and_convert_to_mol2
+from src.data.convert_to_mol2 import add_H_and_convert_to_mol2
 
 def main(): 
     #take as an argument the path to your data
