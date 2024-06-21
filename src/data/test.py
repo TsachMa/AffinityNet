@@ -4,7 +4,9 @@ import sys
 sys.path.append("../../")
 
 from src.data.utils import rdkit_mol_featurizer, pdb_to_rdkit_mol, get_protein_or_ligand_ids
-from src.utils.constants import HOME_DIR
+from src.data.pocket_generator import read_molecule, find_pocket_atoms, save_pocket_atoms, find_and_save_pocket_atoms
+from src.utils.constants import PROJECT_ROOT
+HOME_DIR = PROJECT_ROOT
 class TestRDKitMolFeaturizer(unittest.TestCase):
     def setUp(self):
         self.mol = pdb_to_rdkit_mol(f"{HOME_DIR}/test_data/pdb/test_methionine.pdb")
@@ -195,7 +197,6 @@ class TestRDKitMolFeaturizer(unittest.TestCase):
                     self.assertGreater(node[10], 0)
                 else:
                     self.assertLess(node[10], 0)
-
 class TestGetProteinOrLigandIds(unittest.TestCase):
     def test_get_protein_or_ligand_ids_methionine(self):
         protein_or_ligand_ids = get_protein_or_ligand_ids(f"{HOME_DIR}/test_data/pdb/test_methionine.pdb")
@@ -213,7 +214,24 @@ class TestGetProteinOrLigandIds(unittest.TestCase):
         expected_protein_or_ligand_ids.extend([1] * 43)
 
         np.testing.assert_array_equal(protein_or_ligand_ids, expected_protein_or_ligand_ids)
-                
+
+class TestPocketGenerator(unittest.TestCase):
+    def test_read_molecule(self):
+        protein = read_molecule(f"{HOME_DIR}/test_data/pdb/test_101mA_complex.pdb")
+        self.assertEqual(len(protein.atoms), 1264)
+    
+    def test_find_pocket_atoms(self):
+        protein = read_molecule(f"{HOME_DIR}/test_data/pdb/1a0q_protein.pdb")
+        ligand = read_molecule(f"{HOME_DIR}/test_data/pdb/1a0q_ligand.mol2")
+        pocket_atoms = find_pocket_atoms(protein.atoms, ligand.atoms, 5)
+        print(len(pocket_atoms))
+
+    def test_find_and_save_pocket_atoms(self):
+        find_and_save_pocket_atoms(f"{HOME_DIR}/test_data/pdb/1a0q_protein.pdb", 
+                                   f"{HOME_DIR}/test_data/pdb/1a0q_ligand.mol2", 
+                                   5, 
+                                   f"{HOME_DIR}/test_data/pdb/1a0q_gen_pocket.pdb")
+
 def main():
     unittest.main()
 
