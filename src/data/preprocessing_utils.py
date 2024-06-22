@@ -40,7 +40,7 @@ def add_charges_and_save(input_file, output_file):
     mol.AddHydrogens()
 
     # Calculate Gasteiger charges
-    chargeModel = openbabel.OBChargeModel.FindType("gasteiger")
+    chargeModel = openbabel.OBChargeModel.FindType("mmff94")
     chargeModel.ComputeCharges(mol)
 
     # Write the output file
