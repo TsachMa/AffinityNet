@@ -45,7 +45,3 @@ def add_charges_and_save(input_file, output_file):
 
     # Write the output file
     obConversion.WriteFile(mol, output_file)
-
-# Usage example
-add_charges_and_save(input_file, output_file)
-
